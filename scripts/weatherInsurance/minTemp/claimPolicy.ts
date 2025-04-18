@@ -9,7 +9,7 @@ const policyId = 0;
 
 async function getPolicyCoverage(
   agency: MinTempAgencyInstance,
-  policyId: number
+  policyId: number,
 ) {
   const policy = await agency.registeredPolicies(policyId);
   const policyCoverage = policy.coverage;

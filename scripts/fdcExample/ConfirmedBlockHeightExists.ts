@@ -23,7 +23,7 @@ const urlTypeBase = "xrp";
 
 async function prepareAttestationRequest(
   blockNumber: string,
-  queryWindow: string
+  queryWindow: string,
 ) {
   const requestBody = {
     blockNumber: blockNumber,
@@ -38,13 +38,13 @@ async function prepareAttestationRequest(
     apiKey,
     attestationTypeBase,
     sourceIdBase,
-    requestBody
+    requestBody,
   );
 }
 
 async function retrieveDataAndProof(
   abiEncodedRequest: string,
-  roundId: number
+  roundId: number,
 ) {
   const url = `${COSTON2_DA_LAYER_URL}api/v1/fdc/proof-by-request-round-raw`;
   console.log("Url:", url, "\n");

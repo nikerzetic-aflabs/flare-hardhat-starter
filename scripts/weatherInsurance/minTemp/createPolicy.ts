@@ -30,7 +30,7 @@ async function getWeatherStationCoordinates(apiUrl: string) {
 
 async function createPolicy(
   agency: MinTempAgencyInstance,
-  policyParameters: any
+  policyParameters: any,
 ) {
   const transaction = await agency.createPolicy(
     policyParameters.latitude,
@@ -39,7 +39,7 @@ async function createPolicy(
     policyParameters.expirationTimestamp,
     policyParameters.minTempThreshold,
     policyParameters.coverage,
-    { value: policyParameters.premium }
+    { value: policyParameters.premium },
   );
   console.log("Transaction:", transaction.tx, "\n");
 }

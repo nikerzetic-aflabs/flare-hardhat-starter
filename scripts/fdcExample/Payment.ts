@@ -28,7 +28,7 @@ const urlTypeBase = "xrp";
 async function prepareAttestationRequest(
   transactionId: string,
   inUtxo: string,
-  utxo: string
+  utxo: string,
 ) {
   const requestBody = {
     transactionId: transactionId,
@@ -44,13 +44,13 @@ async function prepareAttestationRequest(
     apiKey,
     attestationTypeBase,
     sourceIdBase,
-    requestBody
+    requestBody,
   );
 }
 
 async function retrieveDataAndProof(
   abiEncodedRequest: string,
-  roundId: number
+  roundId: number,
 ) {
   const url = `${COSTON2_DA_LAYER_URL}api/v1/fdc/proof-by-request-round-raw`;
   console.log("Url:", url, "\n");
@@ -74,7 +74,7 @@ async function deployAndVerifyContract() {
 
 async function interactWithContract(
   paymentRegistry: PaymentRegistryInstance,
-  proof: any
+  proof: any,
 ) {
   console.log("Proof hex:", proof.response_hex, "\n");
 
@@ -86,7 +86,7 @@ async function interactWithContract(
 
   const decodedResponse = web3.eth.abi.decodeParameter(
     responseType,
-    proof.response_hex
+    proof.response_hex,
   );
   console.log("Decoded proof:", decodedResponse, "\n");
   const transaction = await paymentRegistry.registerPayment({
@@ -97,7 +97,7 @@ async function interactWithContract(
   console.log(
     "Verified payment:",
     await paymentRegistry.verifiedPayments(0),
-    "\n"
+    "\n",
   );
 }
 

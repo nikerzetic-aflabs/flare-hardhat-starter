@@ -9,7 +9,7 @@ import {
 const Helpers = artifacts.require("Helpers");
 const FdcHub = artifacts.require("IFdcHub");
 const FdcRequestFeeConfigurations = artifacts.require(
-  "IFdcRequestFeeConfigurations"
+  "IFdcRequestFeeConfigurations",
 );
 const FlareSystemsManager = artifacts.require("IFlareSystemsManager");
 const IRelay = artifacts.require("IRelay");
@@ -20,8 +20,8 @@ async function getHelpers() {
 }
 
 function toHex(data: string) {
-  var result = "";
-  for (var i = 0; i < data.length; i++) {
+  let result = "";
+  for (let i = 0; i < data.length; i++) {
     result += data.charCodeAt(i).toString(16);
   }
   return result.padEnd(64, "0");
@@ -68,7 +68,7 @@ async function prepareAttestationRequestBase(
   apiKey: string,
   attestationTypeBase: string,
   sourceIdBase: string,
-  requestBody: any
+  requestBody: any,
 ) {
   console.log("Url:", url, "\n");
   const attestationType = toUtf8HexString(attestationTypeBase);
@@ -91,7 +91,7 @@ async function prepareAttestationRequestBase(
   });
   if (response.status != 200) {
     throw new Error(
-      `Response status is not OK, status ${response.status} ${response.statusText}\n`
+      `Response status is not OK, status ${response.status} ${response.statusText}\n`,
     );
   }
   console.log("Response status is OK\n");
@@ -102,15 +102,15 @@ async function prepareAttestationRequestBase(
 async function calculateRoundId(transaction: any) {
   const blockNumber = transaction.receipt.blockNumber;
   const block = await ethers.provider.getBlock(blockNumber);
-  const blockTimestamp = BigInt(block!.timestamp);
+  const blockTimestamp = BigInt(block.timestamp);
 
   const flareSystemsManager: IFlareSystemsManagerInstance =
     await getFlareSystemsManager();
   const firsVotingRoundStartTs = BigInt(
-    await flareSystemsManager.firstVotingRoundStartTs()
+    await flareSystemsManager.firstVotingRoundStartTs(),
   );
   const votingEpochDurationSeconds = BigInt(
-    await flareSystemsManager.votingEpochDurationSeconds()
+    await flareSystemsManager.votingEpochDurationSeconds(),
   );
 
   console.log("Block timestamp:", blockTimestamp, "\n");
@@ -118,17 +118,17 @@ async function calculateRoundId(transaction: any) {
   console.log(
     "Voting epoch duration seconds:",
     votingEpochDurationSeconds,
-    "\n"
+    "\n",
   );
 
   const roundId = Number(
-    (blockTimestamp - firsVotingRoundStartTs) / votingEpochDurationSeconds
+    (blockTimestamp - firsVotingRoundStartTs) / votingEpochDurationSeconds,
   );
   console.log("Calculated round id:", roundId, "\n");
   console.log(
     "Received round id:",
     Number(await flareSystemsManager.getCurrentVotingEpochId()),
-    "\n"
+    "\n",
   );
   return roundId;
 }
@@ -145,7 +145,7 @@ async function submitAttestationRequest(abiEncodedRequest: string) {
 
   const roundId = await calculateRoundId(transaction);
   console.log(
-    `Check round progress at: https://${hre.network.name}-systems-explorer.flare.rocks/voting-epoch/${roundId}?tab=fdc\n`
+    `Check round progress at: https://${hre.network.name}-systems-explorer.flare.rocks/voting-epoch/${roundId}?tab=fdc\n`,
   );
   return roundId;
 }
@@ -153,7 +153,7 @@ async function submitAttestationRequest(abiEncodedRequest: string) {
 async function postRequestToDALayer(
   url: string,
   request: any,
-  watchStatus: boolean = false
+  watchStatus: boolean = false,
 ) {
   const response = await fetch(url, {
     method: "POST",
@@ -165,7 +165,7 @@ async function postRequestToDALayer(
   });
   if (watchStatus && response.status != 200) {
     throw new Error(
-      `Response status is not OK, status ${response.status} ${response.statusText}\n`
+      `Response status is not OK, status ${response.status} ${response.statusText}\n`,
     );
   } else if (watchStatus) {
     console.log("Response status is OK\n");
@@ -176,7 +176,7 @@ async function postRequestToDALayer(
 async function retrieveDataAndProofBase(
   url: string,
   abiEncodedRequest: string,
-  roundId: number
+  roundId: number,
 ) {
   console.log("Waiting for the round to finalize...");
   // We check every 10 seconds if the round is finalized
@@ -193,7 +193,7 @@ async function retrieveDataAndProofBase(
   console.log("Prepared request:\n", request, "\n");
 
   await sleep(10000);
-  var proof = await postRequestToDALayer(url, request, true);
+  let proof = await postRequestToDALayer(url, request, true);
   console.log("Waiting for the DA Layer to generate the proof...");
   while (proof.response_hex == undefined) {
     await sleep(10000);

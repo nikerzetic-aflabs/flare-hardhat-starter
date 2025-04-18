@@ -24,7 +24,7 @@ const urlTypeBase = "xrp";
 
 async function prepareAttestationRequest(
   transactionId: string,
-  sourceAddress: string
+  sourceAddress: string,
 ) {
   const sourceAddressIndicator = web3.utils.keccak256(sourceAddress);
 
@@ -41,13 +41,13 @@ async function prepareAttestationRequest(
     apiKey,
     attestationTypeBase,
     sourceIdBase,
-    requestBody
+    requestBody,
   );
 }
 
 async function retrieveDataAndProof(
   abiEncodedRequest: string,
-  roundId: number
+  roundId: number,
 ) {
   const url = `${COSTON2_DA_LAYER_URL}api/v1/fdc/proof-by-request-round-raw`;
   console.log("Url:", url, "\n");

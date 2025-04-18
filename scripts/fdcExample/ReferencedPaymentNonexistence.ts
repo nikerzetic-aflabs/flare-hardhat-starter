@@ -35,7 +35,7 @@ async function prepareAttestationRequest(
   amount: string,
   standardPaymentReference: string,
   checkSourceAddresses: string,
-  sourceAddressesRoot: string
+  sourceAddressesRoot: string,
 ) {
   const requestBody = {
     minimalBlockNumber: minimalBlockNumber,
@@ -56,13 +56,13 @@ async function prepareAttestationRequest(
     apiKey,
     attestationTypeBase,
     sourceIdBase,
-    requestBody
+    requestBody,
   );
 }
 
 async function retrieveDataAndProof(
   abiEncodedRequest: string,
-  roundId: number
+  roundId: number,
 ) {
   const url = `${COSTON2_DA_LAYER_URL}api/v1/fdc/proof-by-request-round-raw`;
   console.log("Url:", url, "\n");
@@ -82,7 +82,7 @@ async function main() {
     amount,
     standardPaymentReference,
     checkSourceAddresses,
-    sourceAddressesRoot
+    sourceAddressesRoot,
   );
   console.log("Data:", data, "\n");
 

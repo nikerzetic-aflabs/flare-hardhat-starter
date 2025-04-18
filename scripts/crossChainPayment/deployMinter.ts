@@ -29,7 +29,7 @@ async function deployAndVerify() {
   console.log(
     "NFTMinter has MINTER_ROLE:",
     await myNFT.hasRole(minterRole, nftMinter.address),
-    "\n"
+    "\n",
   );
 }
 

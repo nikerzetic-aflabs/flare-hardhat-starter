@@ -13,7 +13,9 @@ struct TokenTransfer {
 }
 
 interface INFTMinter {
-    function collectAndProcessTransferEvents(IEVMTransaction.Proof calldata _transaction) external;
+    function collectAndProcessTransferEvents(
+        IEVMTransaction.Proof calldata _transaction
+    ) external;
 }
 
 contract NFTMinter is INFTMinter {
@@ -30,26 +32,47 @@ contract NFTMinter is INFTMinter {
         token = _token;
     }
 
-    function isEVMTransactionProofValid(IEVMTransaction.Proof calldata transaction) public view returns (bool) {
+    function isEVMTransactionProofValid(
+        IEVMTransaction.Proof calldata transaction
+    ) public view returns (bool) {
         // Use the library to get the verifier contract and verify that this transaction was proved by state connector
         IFdcVerification fdc = ContractRegistry.getFdcVerification();
         // return true;
         return fdc.verifyEVMTransaction(transaction);
     }
 
-    function collectAndProcessTransferEvents(IEVMTransaction.Proof calldata _transaction) external {
-        require(!processedTransactions[_transaction.data.requestBody.transactionHash], "Transaction already processed");
+    function collectAndProcessTransferEvents(
+        IEVMTransaction.Proof calldata _transaction
+    ) external {
+        require(
+            !processedTransactions[
+                _transaction.data.requestBody.transactionHash
+            ],
+            "Transaction already processed"
+        );
 
         // Check that this EVMTransaction has indeed been confirmed by the FDC
-        require(isEVMTransactionProofValid(_transaction), "Invalid transaction proof");
+        require(
+            isEVMTransactionProofValid(_transaction),
+            "Invalid transaction proof"
+        );
 
         // Mark this transaction as processed
-        processedTransactions[_transaction.data.requestBody.transactionHash] = true;
+        processedTransactions[
+            _transaction.data.requestBody.transactionHash
+        ] = true;
 
         // Go through all events
-        for (uint256 i = 0; i < _transaction.data.responseBody.events.length; i++) {
+        for (
+            uint256 i = 0;
+            i < _transaction.data.responseBody.events.length;
+            i++
+        ) {
             // Get current event
-            IEVMTransaction.Event memory _event = _transaction.data.responseBody.events[i];
+            IEVMTransaction.Event memory _event = _transaction
+                .data
+                .responseBody
+                .events[i];
 
             // Disregard events that are not from the USDC contract
             if (_event.emitterAddress != USDC_CONTRACT) {
@@ -59,8 +82,9 @@ contract NFTMinter is INFTMinter {
             // Disregard non Transfer events
             if (
                 // The topic0 doesn't match the Transfer event
-                _event.topics.length == 0 // No topics
-                    || _event.topics[0] != keccak256(abi.encodePacked("Transfer(address,address,uint256)"))
+                _event.topics.length == 0 || // No topics
+                _event.topics[0] !=
+                keccak256(abi.encodePacked("Transfer(address,address,uint256)"))
             ) {
                 continue;
             }
@@ -78,14 +102,22 @@ contract NFTMinter is INFTMinter {
                 continue;
             }
 
-            tokenTransfers.push(TokenTransfer({from: sender, to: receiver, value: value}));
+            tokenTransfers.push(
+                TokenTransfer({from: sender, to: receiver, value: value})
+            );
             uint256 tokenId = token.safeMint(sender);
             emit NFTMinted(sender, tokenId);
         }
     }
 
-    function getTokenTransfers() external view returns (TokenTransfer[] memory) {
-        TokenTransfer[] memory result = new TokenTransfer[](tokenTransfers.length);
+    function getTokenTransfers()
+        external
+        view
+        returns (TokenTransfer[] memory)
+    {
+        TokenTransfer[] memory result = new TokenTransfer[](
+            tokenTransfers.length
+        );
         for (uint256 i = 0; i < tokenTransfers.length; i++) {
             result[i] = tokenTransfers[i];
         }

@@ -38,20 +38,20 @@ async function prepareAttestationRequest(transactionHash: string) {
   };
 
   const url = `${verifierUrlBase}verifier/${urlTypeBase}/EVMTransaction/prepareRequest`;
-  const apiKey = VERIFIER_API_KEY_TESTNET!;
+  const apiKey = VERIFIER_API_KEY_TESTNET;
 
   return await prepareAttestationRequestBase(
     url,
     apiKey,
     attestationTypeBase,
     sourceIdBase,
-    requestBody
+    requestBody,
   );
 }
 
 async function retrieveDataAndProof(
   abiEncodedRequest: string,
-  roundId: number
+  roundId: number,
 ) {
   const url = `${COSTON2_DA_LAYER_URL}api/v1/fdc/proof-by-request-round-raw`;
   console.log("Url:", url, "\n");
@@ -76,13 +76,13 @@ async function deployAndVerifyContract() {
 
 async function interactWithContract(
   eventListener: TransferEventListenerInstance,
-  proof: any
+  proof: any,
 ) {
   console.log("Proof hex:", proof.response_hex, "\n");
 
   // A piece of black magic that allows us to read the response type from an artifact
   const IEVMTransactionVerification = await artifacts.require(
-    "IEVMTransactionVerification"
+    "IEVMTransactionVerification",
   );
   const responseType =
     IEVMTransactionVerification._json.abi[0].inputs[0].components[1];
@@ -90,7 +90,7 @@ async function interactWithContract(
 
   const decodedResponse = web3.eth.abi.decodeParameter(
     responseType,
-    proof.response_hex
+    proof.response_hex,
   );
   console.log("Decoded proof:", decodedResponse, "\n");
   const transaction = await eventListener.collectTransferEvents({

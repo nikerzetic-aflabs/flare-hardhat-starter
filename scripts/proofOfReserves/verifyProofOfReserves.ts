@@ -41,8 +41,8 @@ const requests: AttestationRequest[] = [
   {
     source: "jsonApi",
     sourceIdBase: "WEB2",
-    verifierUrlBase: JQ_VERIFIER_URL_TESTNET!,
-    verifierApiKey: JQ_VERIFIER_API_KEY_TESTNET!,
+    verifierUrlBase: JQ_VERIFIER_URL_TESTNET,
+    verifierApiKey: JQ_VERIFIER_API_KEY_TESTNET,
     urlTypeBase: "",
     data: {
       apiUrl:
@@ -54,27 +54,27 @@ const requests: AttestationRequest[] = [
   {
     source: "coston",
     sourceIdBase: "testSGB",
-    verifierUrlBase: VERIFIER_URL_TESTNET!,
-    verifierApiKey: VERIFIER_API_KEY_TESTNET!,
+    verifierUrlBase: VERIFIER_URL_TESTNET,
+    verifierApiKey: VERIFIER_API_KEY_TESTNET,
     urlTypeBase: "sgb",
     data: {
-      transactionHash: transactionHashes.get("coston")!,
+      transactionHash: transactionHashes.get("coston"),
     },
   },
   {
     source: "coston2",
     sourceIdBase: "testFLR",
-    verifierUrlBase: VERIFIER_URL_TESTNET!,
-    verifierApiKey: VERIFIER_API_KEY_TESTNET!,
+    verifierUrlBase: VERIFIER_URL_TESTNET,
+    verifierApiKey: VERIFIER_API_KEY_TESTNET,
     urlTypeBase: "flr",
     data: {
-      transactionHash: transactionHashes.get("coston2")!,
+      transactionHash: transactionHashes.get("coston2"),
     },
   },
 ];
 
 async function prepareJsonApiAttestationRequest(
-  transaction: AttestationRequest
+  transaction: AttestationRequest,
 ) {
   const attestationTypeBase = "IJsonApi";
 
@@ -92,12 +92,12 @@ async function prepareJsonApiAttestationRequest(
     apiKey,
     attestationTypeBase,
     transaction.sourceIdBase,
-    requestBody
+    requestBody,
   );
 }
 
 async function prepareTransactionAttestationRequest(
-  transaction: AttestationRequest
+  transaction: AttestationRequest,
 ) {
   const attestationTypeBase = "EVMTransaction";
 
@@ -122,13 +122,13 @@ async function prepareTransactionAttestationRequest(
     apiKey,
     attestationTypeBase,
     transaction.sourceIdBase,
-    requestBody
+    requestBody,
   );
 }
 
 async function prepareAttestationRequests(transactions: AttestationRequest[]) {
   console.log("\nPreparing data...\n");
-  var data: Map<string, string> = new Map();
+  const data: Map<string, string> = new Map();
 
   for (const transaction of transactions) {
     console.log(`(${transaction.source})\n`);
@@ -138,9 +138,8 @@ async function prepareAttestationRequests(transactions: AttestationRequest[]) {
       console.log("Data:", responseData, "\n");
       data.set(transaction.source, responseData.abiEncodedRequest);
     } else {
-      const responseData = await prepareTransactionAttestationRequest(
-        transaction
-      );
+      const responseData =
+        await prepareTransactionAttestationRequest(transaction);
       console.log("Data:", responseData, "\n");
       data.set(transaction.source, responseData.abiEncodedRequest);
     }
@@ -153,7 +152,7 @@ async function submitAttestationRequests(data: Map<string, string>) {
   console.log("\nSubmitting attestation requests...\n");
 
   const fdcHub = await getFdcHub();
-  var roundIds: Map<string, number> = new Map();
+  const roundIds: Map<string, number> = new Map();
 
   for (const [source, abiEncodedRequest] of data.entries()) {
     console.log(`(${source})\n`);
@@ -166,7 +165,7 @@ async function submitAttestationRequests(data: Map<string, string>) {
 
     const roundId = await calculateRoundId(transaction);
     console.log(
-      `Check round progress at: https://${hre.network.name}-systems-explorer.flare.rocks/voting-epoch/${roundId}?tab=fdc\n`
+      `Check round progress at: https://${hre.network.name}-systems-explorer.flare.rocks/voting-epoch/${roundId}?tab=fdc\n`,
     );
     roundIds.set(source, roundId);
   }
@@ -176,11 +175,11 @@ async function submitAttestationRequests(data: Map<string, string>) {
 
 async function retrieveDataAndProofs(
   data: Map<string, string>,
-  roundIds: Map<string, number>
+  roundIds: Map<string, number>,
 ) {
   console.log("\nRetrieving data and proofs...\n");
 
-  var proofs: Map<string, any> = new Map();
+  const proofs: Map<string, any> = new Map();
 
   const url = `${COSTON2_DA_LAYER_URL}api/v1/fdc/proof-by-request-round-raw`;
   console.log("Url:", url, "\n");
@@ -201,7 +200,7 @@ async function retrieveDataAndProofs(
     };
     console.log("Prepared request:\n", request, "\n");
 
-    var proof = await postRequestToDALayer(url, request, true);
+    let proof = await postRequestToDALayer(url, request, true);
     console.log("Waiting for the DA Layer to generate the proof...");
     while (proof.response_hex == undefined) {
       await sleep(10000);
@@ -218,22 +217,22 @@ async function retrieveDataAndProofs(
 async function prepareDataAndProofs(data: Map<string, any>) {
   const IJsonApiVerification = await artifacts.require("IJsonApiVerification");
   const IEVMTransactionVerification = await artifacts.require(
-    "IEVMTransactionVerification"
+    "IEVMTransactionVerification",
   );
 
   const jsonProof = {
     merkleProof: data.get("jsonApi").proof,
     data: web3.eth.abi.decodeParameter(
       IJsonApiVerification._json.abi[0].inputs[0].components[1],
-      data.get("jsonApi").response_hex
+      data.get("jsonApi").response_hex,
     ),
   };
-  var transactionProofs: any[] = [];
+  const transactionProofs: any[] = [];
   for (const [source, proof] of data.entries()) {
     if (source !== "jsonApi") {
       const decodedProof = web3.eth.abi.decodeParameter(
         IEVMTransactionVerification._json.abi[0].inputs[0].components[1],
-        proof.response_hex
+        proof.response_hex,
       );
       transactionProofs.push({
         merkleProof: proof.proof,
@@ -247,13 +246,13 @@ async function prepareDataAndProofs(data: Map<string, any>) {
 
 async function submitDataAndProofsToProofOfReserves(data: Map<string, any>) {
   const proofOfReserves: ProofOfReservesInstance = await ProofOfReserves.at(
-    proofOfReservesAddress
+    proofOfReservesAddress,
   );
 
   for (const source of tokenAddresses.keys()) {
     await proofOfReserves.updateAddress(
       readerAddresses.get(source),
-      tokenAddresses.get(source)
+      tokenAddresses.get(source),
     );
   }
 

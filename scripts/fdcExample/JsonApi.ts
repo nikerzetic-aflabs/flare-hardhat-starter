@@ -29,7 +29,7 @@ const verifierUrlBase = JQ_VERIFIER_URL_TESTNET;
 async function prepareAttestationRequest(
   apiUrl: string,
   postprocessJq: string,
-  abiSignature: string
+  abiSignature: string,
 ) {
   const requestBody = {
     url: apiUrl,
@@ -38,20 +38,20 @@ async function prepareAttestationRequest(
   };
 
   const url = `${verifierUrlBase}JsonApi/prepareRequest`;
-  const apiKey = JQ_VERIFIER_API_KEY_TESTNET!;
+  const apiKey = JQ_VERIFIER_API_KEY_TESTNET;
 
   return await prepareAttestationRequestBase(
     url,
     apiKey,
     attestationTypeBase,
     sourceIdBase,
-    requestBody
+    requestBody,
   );
 }
 
 async function retrieveDataAndProof(
   abiEncodedRequest: string,
-  roundId: number
+  roundId: number,
 ) {
   const url = `${COSTON2_DA_LAYER_URL}api/v1/fdc/proof-by-request-round-raw`;
   console.log("Url:", url, "n");
@@ -76,7 +76,7 @@ async function deployAndVerifyContract() {
 
 async function interactWithContract(
   characterList: StarWarsCharacterListInstance,
-  proof: any
+  proof: any,
 ) {
   console.log("Proof hex:", proof.response_hex, "\n");
 
@@ -88,7 +88,7 @@ async function interactWithContract(
 
   const decodedResponse = web3.eth.abi.decodeParameter(
     responseType,
-    proof.response_hex
+    proof.response_hex,
   );
   console.log("Decoded proof:", decodedResponse, "\n");
   const transaction = await characterList.addCharacter({
@@ -99,7 +99,7 @@ async function interactWithContract(
   console.log(
     "Star Wars Characters:\n",
     await characterList.getAllCharacters(),
-    "\n"
+    "\n",
   );
 }
 
@@ -107,7 +107,7 @@ async function main() {
   const data = await prepareAttestationRequest(
     apiUrl,
     postprocessJq,
-    abiSignature
+    abiSignature,
   );
   console.log("Data:", data, "\n");
 

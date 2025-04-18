@@ -22,7 +22,9 @@ interface IPaymentRegistry {
 contract PaymentRegistry is IPaymentRegistry {
     Payment[] public verifiedPayments;
 
-    function isPaymentProofValid(IPayment.Proof calldata transaction) public view returns (bool) {
+    function isPaymentProofValid(
+        IPayment.Proof calldata transaction
+    ) public view returns (bool) {
         // Use the library to get the verifier contract and verify that this transaction was proved by state connector
         IFdcVerification fdc = ContractRegistry.getFdcVerification();
         // return true;

@@ -21,7 +21,7 @@ async function deployAndVerify() {
   console.log(
     `(${hre.network.name}) MyStablecoin deployed to`,
     myStablecoin.address,
-    "\n"
+    "\n",
   );
 }
 

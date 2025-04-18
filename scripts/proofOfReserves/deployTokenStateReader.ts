@@ -8,7 +8,7 @@ const TokenStateReader = artifacts.require("TokenStateReader");
 async function deployAndVerify() {
   const args: any[] = [];
   const tokenStateReader: TokenStateReaderInstance = await TokenStateReader.new(
-    ...args
+    ...args,
   );
   try {
     await run("verify:verify", {
@@ -21,7 +21,7 @@ async function deployAndVerify() {
   console.log(
     `(${hre.network.name}) TokenStateReader deployed to`,
     tokenStateReader.address,
-    "\n"
+    "\n",
   );
 }
 

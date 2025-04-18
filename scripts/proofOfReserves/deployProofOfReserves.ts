@@ -9,7 +9,7 @@ const ProofOfReserves = artifacts.require("ProofOfReserves");
 async function deployAndVerify() {
   const args: any[] = [];
   const proofOfReserves: ProofOfReservesInstance = await ProofOfReserves.new(
-    ...args
+    ...args,
   );
   try {
     await run("verify:verify", {
@@ -22,7 +22,7 @@ async function deployAndVerify() {
   console.log(
     `(${hre.network.name}) ProofOfReserves deployed to`,
     proofOfReserves.address,
-    "\n"
+    "\n",
   );
 }
 

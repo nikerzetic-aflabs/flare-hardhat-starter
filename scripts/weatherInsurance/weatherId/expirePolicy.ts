@@ -8,9 +8,8 @@ const WeatherIdAgency = artifacts.require("WeatherIdAgency");
 const policyId = 0;
 
 async function main() {
-  const agency: WeatherIdAgencyInstance = await WeatherIdAgency.at(
-    agencyAddress
-  );
+  const agency: WeatherIdAgencyInstance =
+    await WeatherIdAgency.at(agencyAddress);
   console.log("WeatherIdAgency:", agency.address, "\n");
 
   const transaction = await agency.expirePolicy(policyId);

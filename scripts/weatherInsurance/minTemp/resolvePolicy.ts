@@ -107,7 +107,7 @@ async function prepareUrl(policy: any) {
 async function prepareAttestationRequest(
   apiUrl: string,
   postprocessJq: string,
-  abiSignature: string
+  abiSignature: string,
 ) {
   const requestBody = {
     url: apiUrl,
@@ -116,20 +116,20 @@ async function prepareAttestationRequest(
   };
 
   const url = `${verifierUrlBase}JsonApi/prepareRequest`;
-  const apiKey = JQ_VERIFIER_API_KEY_TESTNET!;
+  const apiKey = JQ_VERIFIER_API_KEY_TESTNET;
 
   return await prepareAttestationRequestBase(
     url,
     apiKey,
     attestationTypeBase,
     sourceIdBase,
-    requestBody
+    requestBody,
   );
 }
 
 async function retrieveDataAndProof(
   abiEncodedRequest: string,
-  roundId: number
+  roundId: number,
 ) {
   const url = `${COSTON2_DA_LAYER_URL}api/v1/fdc/proof-by-request-round-raw`;
   console.log("Url:", url, "\n");
@@ -139,7 +139,7 @@ async function retrieveDataAndProof(
 async function resolvePolicy(
   agency: MinTempAgencyInstance,
   id: number,
-  proof: any
+  proof: any,
 ) {
   console.log("Proof hex:", proof.response_hex, "\n");
 
@@ -151,7 +151,7 @@ async function resolvePolicy(
 
   const decodedResponse = web3.eth.abi.decodeParameter(
     responseType,
-    proof.response_hex
+    proof.response_hex,
   );
   console.log("Decoded proof:", decodedResponse, "\n");
 
@@ -181,7 +181,7 @@ async function main() {
   const data = await prepareAttestationRequest(
     apiUrl,
     postprocessJq,
-    abiSignature
+    abiSignature,
   );
   console.log("Data:", data, "\n");
 

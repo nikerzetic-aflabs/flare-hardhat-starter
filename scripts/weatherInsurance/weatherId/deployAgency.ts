@@ -19,7 +19,7 @@ async function deployAndVerify() {
   console.log(
     `(${hre.network.name}) WeatherIdAgency deployed to`,
     agency.address,
-    "\n"
+    "\n",
   );
 }
 

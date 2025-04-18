@@ -35,13 +35,13 @@ async function prepareAttestationRequest(addressStr: string) {
     apiKey,
     attestationTypeBase,
     sourceIdBase,
-    requestBody
+    requestBody,
   );
 }
 
 async function retrieveDataAndProof(
   abiEncodedRequest: string,
-  roundId: number
+  roundId: number,
 ) {
   const url = `${COSTON2_DA_LAYER_URL}api/v1/fdc/proof-by-request-round-raw`;
   console.log("Url:", url, "\n");
@@ -51,7 +51,7 @@ async function retrieveDataAndProof(
 async function deployAndVerifyContract() {
   const args: any[] = [];
   const addressRegistry: AddressRegistryInstance = await AddressRegistry.new(
-    ...args
+    ...args,
   );
   try {
     await run("verify:verify", {
@@ -67,13 +67,13 @@ async function deployAndVerifyContract() {
 
 async function interactWithContract(
   addressRegistry: AddressRegistryInstance,
-  proof: any
+  proof: any,
 ) {
   console.log("Proof hex:", proof.response_hex, "\n");
 
   // A piece of black magic that allows us to read the response type from an artifact
   const IAddressValidityVerification = await artifacts.require(
-    "IAddressValidityVerification"
+    "IAddressValidityVerification",
   );
   const responseType =
     IAddressValidityVerification._json.abi[0].inputs[0].components[1];
@@ -81,7 +81,7 @@ async function interactWithContract(
 
   const decodedResponse = web3.eth.abi.decodeParameter(
     responseType,
-    proof.response_hex
+    proof.response_hex,
   );
   console.log("Decoded proof:", decodedResponse, "\n");
   const transaction = await addressRegistry.registerAddress({
@@ -92,7 +92,7 @@ async function interactWithContract(
   console.log(
     "Verified address:",
     await addressRegistry.verifiedAddresses(0),
-    "\n"
+    "\n",
   );
 }
 

@@ -9,7 +9,7 @@ const policyId = 0;
 
 async function getPolicyCoverage(
   agency: WeatherIdAgencyInstance,
-  policyId: number
+  policyId: number,
 ) {
   const policy = await agency.registeredPolicies(policyId);
   const policyCoverage = policy.coverage;
@@ -18,9 +18,8 @@ async function getPolicyCoverage(
 }
 
 async function main() {
-  const agency: WeatherIdAgencyInstance = await WeatherIdAgency.at(
-    agencyAddress
-  );
+  const agency: WeatherIdAgencyInstance =
+    await WeatherIdAgency.at(agencyAddress);
   console.log("WeatherIdAgency:", agency.address, "\n");
 
   const policyCoverage = await getPolicyCoverage(agency, policyId);
