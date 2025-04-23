@@ -468,6 +468,13 @@
   resolved "https://registry.yarnpkg.com/@fastify/busboy/-/busboy-2.1.1.tgz#b9da6a878a371829a0502c9b6c1c143ef6663f4d"
   integrity sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==
 
+"@flarenetwork/flare-periphery-contract-artifacts@^0.1.22":
+  version "0.1.22"
+  resolved "https://registry.yarnpkg.com/@flarenetwork/flare-periphery-contract-artifacts/-/flare-periphery-contract-artifacts-0.1.22.tgz#7c4d47c796e29edf82e959fed5e7626e29caa946"
+  integrity sha512-Jvl9CRgRdwqJSrVvQTZsIikqLszHmOl9L5casS3g67Z0GU0vfqVJLtqEgxB6oXI4zKE0QXdwHwXcI03rYuaQiQ==
+  dependencies:
+    ethers "^6.7.1"
+
 "@flarenetwork/flare-periphery-contracts@^0.1.22":
   version "0.1.22"
   resolved "https://registry.yarnpkg.com/@flarenetwork/flare-periphery-contracts/-/flare-periphery-contracts-0.1.22.tgz#7cf2c95e0f30c27a77ce7f0107e199f9376ac806"
@@ -2855,7 +2862,7 @@ ethers@^5.0.13, ethers@^5.7.2:
     "@ethersproject/web" "5.7.1"
     "@ethersproject/wordlists" "5.7.0"
 
-ethers@^6.4.0, ethers@^6.7.0:
+ethers@^6.4.0, ethers@^6.7.0, ethers@^6.7.1:
   version "6.13.5"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-6.13.5.tgz#8c1d6ac988ac08abc3c1d8fabbd4b8b602851ac4"
   integrity sha512-+knKNieu5EKRThQJWwqaJ10a6HE9sSehGeqWN65//wE7j47ZpFhKAnHB/JJFibwwg61I/koxaPsXbXpD/skNOQ==
