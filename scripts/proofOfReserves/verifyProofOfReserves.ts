@@ -1,15 +1,8 @@
 import hre from "hardhat";
 import { ProofOfReservesInstance, IRelayInstance, IFdcVerificationInstance } from "../../typechain-types";
-import {
-    prepareAttestationRequestBase,
-    getFdcHub,
-    getFdcRequestFee,
-    getRelay,
-    calculateRoundId,
-    postRequestToDALayer,
-    sleep,
-    getFdcVerification,
-} from "../fdcExample/Base";
+import { prepareAttestationRequestBase, getFdcRequestFee, calculateRoundId, postRequestToDALayer } from "../utils/fdc";
+import { getFdcHub, getRelay, getFdcVerification } from "scripts/utils/getters";
+import { sleep } from "scripts/utils/core";
 import { tokenAddresses, readerAddresses, proofOfReservesAddress, transactionHashes } from "./config";
 
 const ProofOfReserves = artifacts.require("ProofOfReserves");
